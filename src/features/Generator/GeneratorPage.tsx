@@ -15,7 +15,7 @@ export const GeneratorPage: React.FC = () => {
         Сгенерируйте готовый csv-файл нажатием одной кнопки
       </p>
 
-      {!isDone ? (
+      {!isDone && !error ? (
         <button
           onClick={handleGenerate}
           disabled={isLoading}
@@ -23,19 +23,35 @@ export const GeneratorPage: React.FC = () => {
         >
           {isLoading ? <Spinner /> : "Начать генерацию"}
         </button>
-      ) : (
-        <div className={styles.doneSection}>
-          <DoneButton />
-          <div style={{ width: "10px" }} />
-          <CloseButton onClick={reset} />
+      ) : null}
+
+      {isDone && !error && (
+        <div className={styles.doneContainer}>
+          <div className={styles.buttonsRow}>
+            <DoneButton />
+            <div className={styles.buttonGap} />
+            <CloseButton onClick={reset} />
+          </div>
+          <p className={styles.doneText}>файл сгенерирован!</p>
+        </div>
+      )}
+
+      {error && (
+        <div className={styles.errorContainer}>
+          <div className={styles.buttonsRow}>
+            <button onClick={handleGenerate} className={styles.retryButton}>
+              Ошибка
+            </button>
+            <div className={styles.buttonGap} />
+            <CloseButton onClick={reset} />
+          </div>
+          <p className={styles.errorText}>упс, не то...</p>
         </div>
       )}
 
       {isLoading && (
         <p className={styles.loadingText}>идет процесс генерации</p>
       )}
-
-      {error && <p className={styles.error}>{error}</p>}
     </div>
   );
 };
