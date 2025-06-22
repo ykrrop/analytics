@@ -1,0 +1,137 @@
+.container {
+  max-width: 1840px;
+  margin: 0 auto;
+  padding: 20px;
+  margin-top: 40px;
+}
+
+.title {
+  font-size: 30px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.dropArea {
+  width: 100%;
+  height: 239px;
+  background: #eacdff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: 40px;
+  transition: all 0.3s ease;
+}
+
+.dropArea.active {
+  background: #d4fae6;
+}
+
+.dropArea.hasFile {
+  background: transparent;
+  border: 2px solid #201b10;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.fileSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.fileRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.uploadBtn {
+  width: 361px;
+  height: 70px;
+  background: #ffffff;
+  color: #000000;
+  font-size: 35px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.fileNameBtn {
+  width: auto;
+  max-width: 600px;
+  padding: 0 20px;
+  height: 70px;
+  background: #cb81ff;
+  color: #201b10;
+  font-size: 35px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease;
+}
+
+.fileNameBtn.processed {
+  background: #d4fae6;
+  color: #201b10;
+}
+
+.clearFileBtn {
+  background: #201b10;
+  color: #ffffff;
+  border: none;
+  font-size: 35px;
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hint {
+  margin-top: 10px;
+  font-size: 35px;
+  color: #201b10;
+}
+
+.highlightsHint {
+  margin: 150px 0 40px;
+  font-size: 40px;
+  text-align: center;
+  color: #cb81ff;
+  transition: opacity 0.3s ease;
+}
+
+.sendBtn {
+  margin: 32px auto 0;
+  font-weight: 500;
+  display: block;
+  width: 231px;
+  height: 80px;
+  font-size: 35px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  background: #2ae881;
+  color: #201b10;
+}
+
+.error {
+  color: red;
+  margin-top: 16px;
+  text-align: center;
+  font-size: 24px;
+}

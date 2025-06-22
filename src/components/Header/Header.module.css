@@ -1,0 +1,66 @@
+.header {
+  max-width: 1840px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  margin: 20px auto 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.main-logo {
+  height: 59px;
+  width: 268px;
+}
+
+.title {
+  font-size: 30px;
+  font-weight: 600;
+  color: #201b10;
+  background-color: #cb81ff;
+  padding: 0;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.nav {
+  display: flex;
+  gap: 40px;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  text-decoration: none;
+  color: #201b10;
+  padding: 0.5rem 0;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.link:hover {
+  border-color: rgba(60, 19, 97, 0.3);
+}
+
+.active {
+  border-bottom: 3px solid #201b10;
+}
+
+.icon {
+  height: 32px;
+  width: auto;
+}
+
+.label {
+  font-size: 30px;
+  line-height: 1.2;
+}

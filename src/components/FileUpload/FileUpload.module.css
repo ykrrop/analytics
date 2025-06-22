@@ -1,0 +1,28 @@
+.uploadArea {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  border-radius: 8px;
+}
+
+.uploadArea.active {
+  border-color: #007bff;
+  background-color: #f0f8ff;
+}
+
+.fileInput {
+  display: none;
+}
+
+.selectButton {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.selectButton:hover {
+  background-color: #0056b3;
+}

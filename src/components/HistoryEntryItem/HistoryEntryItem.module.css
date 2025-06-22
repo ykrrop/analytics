@@ -1,0 +1,96 @@
+.entryContainer {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.entryBlock {
+  width: 1713px;
+  height: 92px;
+  background: #cb81ff;
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.entryBlock:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.fileInfo {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  flex: 1;
+}
+
+.fileIcon {
+  width: 40px;
+  height: 40px;
+}
+
+.fileName {
+  font-size: 30px;
+  font-weight: 500;
+  max-width: 800px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.date {
+  font-size: 30px;
+  font-weight: 500;
+  min-width: 120px;
+}
+
+.statusContainer {
+  display: flex;
+  gap: 40px;
+  margin-left: auto;
+  align-items: center;
+}
+
+.statusSuccess,
+.statusError {
+  font-size: 30px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: color 0.3s ease;
+}
+
+.statusIcon {
+  width: 35px;
+  height: 35px;
+}
+
+.deleteButton {
+  background: #ffffff;
+  border: none;
+  cursor: pointer;
+  width: 87px;
+  height: 87px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.deleteButton:hover {
+  transform: scale(1.1);
+  background: #f5f5f5;
+}
+
+.trashIcon {
+  width: 50px;
+  height: 50px;
+}

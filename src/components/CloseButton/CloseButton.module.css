@@ -1,0 +1,16 @@
+.closeBtn {
+  background: #201b10;
+  width: 70px;
+  height: 70px;
+  border: none;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.closeIcon {
+  width: 35px;
+  height: 35px;
+}

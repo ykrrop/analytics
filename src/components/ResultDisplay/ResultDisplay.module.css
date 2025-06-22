@@ -1,0 +1,37 @@
+.resultContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 900px);
+  grid-auto-rows: 117px;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.item {
+  width: 900px;
+  height: 117px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.label {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.value {
+  font-size: 40px;
+  font-weight: bold;
+}

@@ -1,0 +1,11 @@
+.doneBtn {
+  background-color: #d4fae6;
+  color: #201b10;
+  font-size: 35px;
+  font-weight: bold;
+  width: 144px;
+  height: 70px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
