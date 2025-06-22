@@ -3,10 +3,11 @@ import { aggregateFile } from "../../services/aggregatorService";
 import { useHistoryStore } from "../../store/historyStore";
 import { useAggregatorStore } from "../../store/aggregatorStore";
 import { ResultDisplay } from "../../components/ResultDisplay/ResultDisplay";
+import { FileDropzone } from "./components/FileDropzone";
+import { SendButton } from "./components/SendButton";
 
 import styles from "./AggregatorPage.module.css";
 import type { AggregationResult } from "../../types";
-import { FileDropzone } from "./components/FileDropzone";
 
 export const AggregatorPage: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -121,16 +122,11 @@ export const AggregatorPage: React.FC = () => {
       />
 
       {!isLoading && !isProcessed && !error && (
-        <button
-          className={`
-            ${styles.sendBtn}
-            ${file ? styles.sendBtnActive : styles.sendBtnInactive}
-          `}
-          onClick={handleSend}
+        <SendButton
           disabled={!file || isLoading}
-        >
-          Отправить
-        </button>
+          active={!!file}
+          onClick={handleSend}
+        />
       )}
 
       {!showBlocks && (
