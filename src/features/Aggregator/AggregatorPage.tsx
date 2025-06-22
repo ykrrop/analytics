@@ -2,9 +2,10 @@ import React, { useState, useRef } from "react";
 import { aggregateFile } from "../../services/aggregatorService";
 import { useHistoryStore } from "../../store/historyStore";
 import { useAggregatorStore } from "../../store/aggregatorStore";
-import { ResultDisplay } from "../../components/ResultDisplay/ResultDisplay";
+
 import { FileDropzone } from "./components/FileDropzone";
 import { SendButton } from "./components/SendButton";
+import { ResultSection } from "./components/ResultSection";
 
 import styles from "./AggregatorPage.module.css";
 import type { AggregationResult } from "../../types";
@@ -129,15 +130,7 @@ export const AggregatorPage: React.FC = () => {
         />
       )}
 
-      {!showBlocks && (
-        <p className={styles.highlightsHint}>
-          Здесь
-          <br />
-          появятся хайлайты
-        </p>
-      )}
-
-      {showBlocks && result && <ResultDisplay data={result} />}
+      <ResultSection showBlocks={showBlocks} result={result} />
     </div>
   );
 };
