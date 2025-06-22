@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { HistoryEntry } from "../types"; // Добавляем импорт AggregationResult
+import type { HistoryEntry } from "../types";
 
 interface HistoryState {
   history: HistoryEntry[];

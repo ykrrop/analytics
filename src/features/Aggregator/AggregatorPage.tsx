@@ -1,73 +1,95 @@
 import React, { useState, useRef } from "react";
 import { aggregateFile } from "../../services/aggregatorService";
 import { useHistoryStore } from "../../store/historyStore";
-import { Spinner } from "../../shared/ui/Spinner/Spinner";
+import { useAggregatorStore } from "../../store/aggregatorStore";
+import { Spinner } from "../../components/Spinner/Spinner";
 import { ResultDisplay } from "../../components/ResultDisplay/ResultDisplay";
 import styles from "./AggregatorPage.module.css";
 import type { AggregationResult } from "../../types";
+import Close from "../../assets/icons/Close.svg";
 
 export const AggregatorPage: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [showBlocks, setShowBlocks] = useState(false);
-  const [result, setResult] = useState<AggregationResult | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [isProcessed, setIsProcessed] = useState(false);
+  const {
+    fileName,
+    isDragging,
+    isLoading,
+    showBlocks,
+    result,
+    error,
+    isProcessed,
+    isInvalidFormat,
+    setState,
+    resetState,
+  } = useAggregatorStore();
   const addToHistory = useHistoryStore((s) => s.addToHistory);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  const resetState = () => {
-    setFile(null);
-    setShowBlocks(false);
-    setResult(null);
-    setError(null);
-    setIsProcessed(false);
-    setIsLoading(false);
-  };
 
   const onDrag = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsDragging(e.type !== "dragleave");
+    setState({ isDragging: e.type !== "dragleave" });
   };
 
   const onDrop = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsDragging(false);
     const f = e.dataTransfer.files?.[0];
     if (f && f.type === "text/csv") {
       setFile(f);
-      setError(null);
-      setIsProcessed(false);
+      setState({
+        fileName: f.name,
+        error: null,
+        isProcessed: false,
+        isInvalidFormat: false,
+      });
     } else {
-      setError("Пожалуйста, загрузите CSV-файл.");
+      setState({
+        fileName: f?.name || null,
+        error: null,
+        isInvalidFormat: true,
+      });
     }
   };
 
   const onSelect = () => inputRef.current?.click();
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
     if (f && f.type === "text/csv") {
       setFile(f);
-      setError(null);
-      setIsProcessed(false);
+      setState({
+        fileName: f.name,
+        error: null,
+        isProcessed: false,
+        isInvalidFormat: false,
+      });
     } else {
-      setError("Пожалуйста, загрузите CSV-файл.");
+      setState({
+        fileName: f?.name || null,
+        error: null,
+        isInvalidFormat: true,
+      });
     }
   };
 
   const handleSend = () => {
-    if (!file) return;
-    setShowBlocks(true);
-    setIsLoading(true);
-    setResult({} as AggregationResult);
-    setError(null);
-    setIsProcessed(false);
+    if (!file) {
+      setState({
+        error: "Файл не загружен. Пожалуйста, загрузите файл заново.",
+      });
+      return;
+    }
+    setState({
+      showBlocks: true,
+      isLoading: true,
+      result: {} as AggregationResult,
+      error: null,
+      isProcessed: false,
+    });
 
     aggregateFile(file, 10000, (partial) => {
-      setResult(partial);
+      setState({ result: partial });
     })
       .then((final) => {
         addToHistory({
@@ -76,11 +98,10 @@ export const AggregatorPage: React.FC = () => {
           uploadDate: new Date().toISOString(),
           result: final,
         });
-        setIsProcessed(true);
+        setState({ isProcessed: true });
       })
       .catch((e) => {
-        setError((e as Error).message);
-        setIsProcessed(false);
+        setState({ error: (e as Error).message, isProcessed: false });
         addToHistory({
           id: Date.now().toString(),
           fileName: file.name,
@@ -89,21 +110,29 @@ export const AggregatorPage: React.FC = () => {
         });
       })
       .finally(() => {
-        setIsLoading(false);
+        setState({ isLoading: false });
       });
+  };
+
+  const handleReset = () => {
+    setFile(null);
+    resetState();
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
   };
 
   return (
     <div className={styles.container}>
       <p className={styles.title}>
-        Загрузите csv файл и получите полную информацию о нём за сверхнизкое
-        время
+        Загрузите <strong>csv</strong> файл и получите{" "}
+        <strong>полную информацию</strong> о нём за сверхнизкое время
       </p>
 
       <div
         className={`${styles.dropArea} ${isDragging ? styles.active : ""} ${
-          file ? styles.hasFile : ""
-        }`}
+          fileName ? styles.hasFile : ""
+        } ${isInvalidFormat ? styles.invalidFormat : ""}`}
         onDragEnter={onDrag}
         onDragOver={onDrag}
         onDragLeave={onDrag}
@@ -118,23 +147,38 @@ export const AggregatorPage: React.FC = () => {
         />
 
         {isLoading ? (
-          <Spinner />
-        ) : file ? (
+          <div className={styles.spinnerContainer}>
+            <Spinner />
+            <p className={styles.parsingText}>идёт парсинг файла</p>
+          </div>
+        ) : fileName ? (
           <div className={styles.fileSection}>
             <div className={styles.fileRow}>
               <button
                 className={`${styles.fileNameBtn} ${
                   isProcessed ? styles.processed : ""
-                }`}
+                } ${isInvalidFormat ? styles.invalidFormat : ""}`}
               >
-                {file.name}
+                {fileName}
               </button>
-              <button className={styles.clearFileBtn} onClick={resetState}>
-                ×
+              <button
+                className={styles.clearFileBtn}
+                onClick={handleReset}
+                aria-label="Удалить файл"
+              >
+                <img src={Close} alt="Крестик" />
               </button>
             </div>
-            <p className={styles.hint}>
-              {isProcessed ? "готово!" : "файл загружен!"}
+            <p
+              className={`${styles.hint} ${
+                isInvalidFormat ? styles.invalidHint : ""
+              }`}
+            >
+              {isInvalidFormat
+                ? "упс, не то..."
+                : isProcessed
+                ? "готово!"
+                : "файл загружен!"}
             </p>
           </div>
         ) : (
@@ -147,14 +191,24 @@ export const AggregatorPage: React.FC = () => {
         )}
       </div>
 
-      {!showBlocks && file && !isLoading && (
-        <button className={styles.sendBtn} onClick={handleSend}>
+      {!isLoading && !isProcessed && !isInvalidFormat && (
+        <button
+          className={`${styles.sendBtn} ${
+            file ? styles.sendBtnActive : styles.sendBtnInactive
+          }`}
+          onClick={handleSend}
+          disabled={!file || isLoading}
+        >
           Отправить
         </button>
       )}
 
       {!showBlocks && (
-        <p className={styles.highlightsHint}>Здесь появятся хайлайты</p>
+        <p className={styles.highlightsHint}>
+          Здесь
+          <br />
+          появятся хайлайты
+        </p>
       )}
 
       {error && <p className={styles.error}>{error}</p>}

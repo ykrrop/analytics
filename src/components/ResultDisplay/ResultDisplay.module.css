@@ -9,7 +9,7 @@
   display: grid;
   grid-template-columns: repeat(2, 900px);
   grid-auto-rows: 117px;
-  gap: 10px;
+  gap: 10px 50px; /* Увеличен горизонтальный отступ */
   justify-content: center;
   margin-top: 24px;
 }

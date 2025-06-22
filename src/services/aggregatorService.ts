@@ -26,7 +26,7 @@ export async function aggregateFile(
     if (done) break;
     buffer += decoder.decode(value, { stream: true });
     const lines = buffer.split("\n");
-    buffer = lines.pop()!; // оставляем неполную строку
+    buffer = lines.pop()!;
 
     for (const line of lines) {
       if (!line) continue;
@@ -40,7 +40,6 @@ export async function aggregateFile(
     }
   }
 
-  // обрабатываем остаток буфера
   if (buffer) {
     try {
       const json = JSON.parse(buffer) as AggregationResult;

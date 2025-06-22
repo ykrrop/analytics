@@ -33,6 +33,10 @@
   border: 2px solid #201b10;
 }
 
+.dropArea.invalidFormat {
+  border: 2px solid #ff5f00 !important;
+}
+
 .hiddenInput {
   display: none;
 }
@@ -86,6 +90,11 @@
   color: #201b10;
 }
 
+.fileNameBtn.invalidFormat {
+  background: #ff5f00;
+  color: #ffffff;
+}
+
 .clearFileBtn {
   background: #201b10;
   color: #ffffff;
@@ -107,26 +116,40 @@
   color: #201b10;
 }
 
+.invalidHint {
+  color: #ff5f00 !important;
+}
+
 .highlightsHint {
-  margin: 150px 0 40px;
+  margin: 200px 0 40px;
   font-size: 40px;
   text-align: center;
   color: #cb81ff;
   transition: opacity 0.3s ease;
+  line-height: 1.2;
 }
 
 .sendBtn {
-  margin: 32px auto 0;
-  font-weight: 500;
+  font-weight: bold;
   display: block;
+  margin: 32px auto 0;
   width: 231px;
   height: 80px;
   font-size: 35px;
   border: none;
   border-radius: 25px;
   cursor: pointer;
-  background: #2ae881;
   color: #201b10;
+  transition: background-color 0.3s ease;
+}
+
+.sendBtnInactive {
+  background-color: #c0c0c0;
+  color: #787878;
+}
+
+.sendBtnActive {
+  background-color: #2ae881;
 }
 
 .error {
@@ -134,4 +157,24 @@
   margin-top: 16px;
   text-align: center;
   font-size: 24px;
+}
+
+.spinnerContainer {
+  width: 331px;
+  height: 70px;
+  background: #cb81ff;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.parsingText {
+  position: absolute;
+  bottom: -40px;
+  font-size: 35px;
+  color: #201b10;
+  white-space: nowrap;
 }
