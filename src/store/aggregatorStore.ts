@@ -10,7 +10,6 @@ interface AggregatorState {
   result: AggregationResult | null;
   error: string | null;
   isProcessed: boolean;
-  isInvalidFormat: boolean;
   setState: (state: Partial<AggregatorState>) => void;
   resetState: () => void;
 }
@@ -25,7 +24,6 @@ export const useAggregatorStore = create<AggregatorState>()(
       result: null,
       error: null,
       isProcessed: false,
-      isInvalidFormat: false,
       setState: (newState) => set((state) => ({ ...state, ...newState })),
       resetState: () =>
         set({
@@ -36,7 +34,6 @@ export const useAggregatorStore = create<AggregatorState>()(
           result: null,
           error: null,
           isProcessed: false,
-          isInvalidFormat: false,
         }),
     }),
     {

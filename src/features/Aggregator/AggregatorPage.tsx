@@ -18,7 +18,6 @@ export const AggregatorPage: React.FC = () => {
     result,
     error,
     isProcessed,
-    isInvalidFormat,
     setState,
     resetState,
   } = useAggregatorStore();
@@ -41,13 +40,11 @@ export const AggregatorPage: React.FC = () => {
         fileName: f.name,
         error: null,
         isProcessed: false,
-        isInvalidFormat: false,
       });
     } else {
       setState({
         fileName: f?.name || null,
-        error: null,
-        isInvalidFormat: true,
+        error: "упс, не то...",
       });
     }
   };
@@ -62,13 +59,11 @@ export const AggregatorPage: React.FC = () => {
         fileName: f.name,
         error: null,
         isProcessed: false,
-        isInvalidFormat: false,
       });
     } else {
       setState({
         fileName: f?.name || null,
-        error: null,
-        isInvalidFormat: true,
+        error: "упс, не то...",
       });
     }
   };
@@ -76,7 +71,7 @@ export const AggregatorPage: React.FC = () => {
   const handleSend = () => {
     if (!file) {
       setState({
-        error: "Файл не загружен. Пожалуйста, загрузите файл заново.",
+        error: "упс, не то...",
       });
       return;
     }
@@ -100,8 +95,11 @@ export const AggregatorPage: React.FC = () => {
         });
         setState({ isProcessed: true });
       })
-      .catch((e) => {
-        setState({ error: (e as Error).message, isProcessed: false });
+      .catch(() => {
+        setState({
+          error: "упс, не то...",
+          isProcessed: false,
+        });
         addToHistory({
           id: Date.now().toString(),
           fileName: file.name,
@@ -132,7 +130,7 @@ export const AggregatorPage: React.FC = () => {
       <div
         className={`${styles.dropArea} ${isDragging ? styles.active : ""} ${
           fileName ? styles.hasFile : ""
-        } ${isInvalidFormat ? styles.invalidFormat : ""}`}
+        } ${error ? styles.invalidFormat : ""}`}
         onDragEnter={onDrag}
         onDragOver={onDrag}
         onDragLeave={onDrag}
@@ -157,7 +155,7 @@ export const AggregatorPage: React.FC = () => {
               <button
                 className={`${styles.fileNameBtn} ${
                   isProcessed ? styles.processed : ""
-                } ${isInvalidFormat ? styles.invalidFormat : ""}`}
+                } ${error ? styles.invalidFormat : ""}`}
               >
                 {fileName}
               </button>
@@ -169,12 +167,8 @@ export const AggregatorPage: React.FC = () => {
                 <img src={Close} alt="Крестик" />
               </button>
             </div>
-            <p
-              className={`${styles.hint} ${
-                isInvalidFormat ? styles.invalidHint : ""
-              }`}
-            >
-              {isInvalidFormat
+            <p className={`${styles.hint} ${error ? styles.invalidHint : ""}`}>
+              {error
                 ? "упс, не то..."
                 : isProcessed
                 ? "готово!"
@@ -191,7 +185,7 @@ export const AggregatorPage: React.FC = () => {
         )}
       </div>
 
-      {!isLoading && !isProcessed && !isInvalidFormat && (
+      {!isLoading && !isProcessed && !error && (
         <button
           className={`${styles.sendBtn} ${
             file ? styles.sendBtnActive : styles.sendBtnInactive
@@ -210,8 +204,6 @@ export const AggregatorPage: React.FC = () => {
           появятся хайлайты
         </p>
       )}
-
-      {error && <p className={styles.error}>{error}</p>}
 
       {showBlocks && result && <ResultDisplay data={result} />}
     </div>
