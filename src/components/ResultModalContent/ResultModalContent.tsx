@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./ResultModalContent.module.css";
 import type { HistoryEntry } from "../../types";
+import { formatDayOfYear } from "../../utils/format";
 
 interface ResultModalContentProps {
   entry: HistoryEntry;
@@ -16,27 +17,27 @@ export const ResultModalContent: React.FC<ResultModalContentProps> = ({
   const data = entry.result;
   const items = [
     {
-      value: (data.total_spend_galactic ?? 0).toLocaleString(),
+      value: Math.round(data.total_spend_galactic ?? 0).toLocaleString(),
       label: "общие расходы в галактических кредитах",
-    },
-    {
-      value: data.less_spent_civ ?? "-",
-      label: "цивилизация с минимальными расходами",
     },
     {
       value: (data.rows_affected ?? 0).toLocaleString(),
       label: "количество обработанных записей",
     },
     {
-      value: data.big_spent_at ?? 0,
-      label: "день года с максимальными расходами",
-    },
-    {
-      value: data.less_spent_at ?? 0,
+      value: formatDayOfYear(data.less_spent_at),
       label: "день года с минимальными расходами",
     },
     {
-      value: (data.big_spent_value ?? 0).toLocaleString(),
+      value: formatDayOfYear(data.big_spent_at),
+      label: "день года с максимальными расходами",
+    },
+    {
+      value: data.less_spent_civ ?? "-",
+      label: "цивилизация с минимальными расходами",
+    },
+    {
+      value: Math.round(data.big_spent_value ?? 0).toLocaleString(),
       label: "максимальная сумма расходов за день",
     },
     {

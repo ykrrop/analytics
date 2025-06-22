@@ -1,39 +1,10 @@
 import type { AggregationResult } from "../../types";
+import { formatDayOfYear } from "../../utils/format";
 import styles from "./ResultDisplay.module.css";
 
 interface ResultDisplayProps {
   data: AggregationResult;
 }
-
-// Функция для форматирования дня года в "день месяца" с правильным склонением
-const formatDayOfYear = (dayOfYear?: number): string => {
-  if (!dayOfYear || dayOfYear <= 0 || dayOfYear > 365) return "-";
-
-  const date = new Date(2023, 0); // 1 января 2023
-  date.setDate(dayOfYear);
-
-  const day = date.getDate();
-
-  // Месяцы в родительном падеже (правильное склонение)
-  const months = [
-    "января",
-    "февраля",
-    "марта",
-    "апреля",
-    "мая",
-    "июня",
-    "июля",
-    "августа",
-    "сентября",
-    "октября",
-    "ноября",
-    "декабря",
-  ];
-
-  const monthName = months[date.getMonth()];
-
-  return `${day} ${monthName}`;
-};
 
 export const ResultDisplay: React.FC<ResultDisplayProps> = ({ data }) => {
   return (

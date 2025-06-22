@@ -35,7 +35,7 @@ export const HistoryPage: React.FC = () => {
 
         {history.length > 0 && (
           <button className={styles.clearAllButton} onClick={clearHistory}>
-            Полная очистка
+            Очистить всё
           </button>
         )}
       </div>
