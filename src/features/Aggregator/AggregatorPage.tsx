@@ -2,11 +2,11 @@ import React, { useState, useRef } from "react";
 import { aggregateFile } from "../../services/aggregatorService";
 import { useHistoryStore } from "../../store/historyStore";
 import { useAggregatorStore } from "../../store/aggregatorStore";
-import { Spinner } from "../../components/Spinner/Spinner";
 import { ResultDisplay } from "../../components/ResultDisplay/ResultDisplay";
-import { CloseButton } from "../../components/CloseButton/CloseButton";
+
 import styles from "./AggregatorPage.module.css";
 import type { AggregationResult } from "../../types";
+import { FileDropzone } from "./components/FileDropzone";
 
 export const AggregatorPage: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -36,16 +36,9 @@ export const AggregatorPage: React.FC = () => {
     const f = e.dataTransfer.files?.[0];
     if (f && f.type === "text/csv") {
       setFile(f);
-      setState({
-        fileName: f.name,
-        error: null,
-        isProcessed: false,
-      });
+      setState({ fileName: f.name, error: null, isProcessed: false });
     } else {
-      setState({
-        fileName: f?.name || null,
-        error: "упс, не то...",
-      });
+      setState({ fileName: f?.name || null, error: "упс, не то..." });
     }
   };
 
@@ -55,24 +48,15 @@ export const AggregatorPage: React.FC = () => {
     const f = e.target.files?.[0];
     if (f && f.type === "text/csv") {
       setFile(f);
-      setState({
-        fileName: f.name,
-        error: null,
-        isProcessed: false,
-      });
+      setState({ fileName: f.name, error: null, isProcessed: false });
     } else {
-      setState({
-        fileName: f?.name || null,
-        error: "упс, не то...",
-      });
+      setState({ fileName: f?.name || null, error: "упс, не то..." });
     }
   };
 
   const handleSend = () => {
     if (!file) {
-      setState({
-        error: "упс, не то...",
-      });
+      setState({ error: "упс, не то..." });
       return;
     }
     setState({
@@ -96,10 +80,7 @@ export const AggregatorPage: React.FC = () => {
         setState({ isProcessed: true });
       })
       .catch(() => {
-        setState({
-          error: "упс, не то...",
-          isProcessed: false,
-        });
+        setState({ error: "упс, не то...", isProcessed: false });
         addToHistory({
           id: Date.now().toString(),
           fileName: file.name,
@@ -115,9 +96,7 @@ export const AggregatorPage: React.FC = () => {
   const handleReset = () => {
     setFile(null);
     resetState();
-    if (inputRef.current) {
-      inputRef.current.value = "";
-    }
+    if (inputRef.current) inputRef.current.value = "";
   };
 
   return (
@@ -127,67 +106,26 @@ export const AggregatorPage: React.FC = () => {
         <strong>полную информацию</strong> о нём за сверхнизкое время
       </p>
 
-      <div
-        className={`${styles.dropArea} ${isDragging ? styles.active : ""} ${
-          fileName ? styles.hasFile : ""
-        } ${error ? styles.invalidFormat : ""}`}
-        onDragEnter={onDrag}
-        onDragOver={onDrag}
-        onDragLeave={onDrag}
+      <FileDropzone
+        inputRef={inputRef}
+        fileName={fileName}
+        isDragging={isDragging}
+        isLoading={isLoading}
+        isProcessed={isProcessed}
+        error={error}
+        onDrag={onDrag}
         onDrop={onDrop}
-      >
-        <input
-          ref={inputRef}
-          type="file"
-          accept=".csv"
-          className={styles.hiddenInput}
-          onChange={onChange}
-        />
-
-        {isLoading ? (
-          <div className={styles.spinnerContainer}>
-            <Spinner />
-            <p className={styles.parsingText}>идёт парсинг файла</p>
-          </div>
-        ) : fileName ? (
-          <div className={styles.fileSection}>
-            <div className={styles.fileRow}>
-              <button
-                className={`${styles.fileNameBtn} ${
-                  isProcessed ? styles.processed : ""
-                } ${error ? styles.invalidFormat : ""}`}
-              >
-                {fileName}
-              </button>
-              <CloseButton
-                onClick={handleReset}
-                className={styles.clearFileBtn}
-                ariaLabel="Удалить файл"
-              />
-            </div>
-            <p className={`${styles.hint} ${error ? styles.invalidHint : ""}`}>
-              {error
-                ? "упс, не то..."
-                : isProcessed
-                ? "готово!"
-                : "файл загружен!"}
-            </p>
-          </div>
-        ) : (
-          <>
-            <button className={styles.uploadBtn} onClick={onSelect}>
-              Загрузить файл
-            </button>
-            <p className={styles.hint}>или перетащите сюда</p>
-          </>
-        )}
-      </div>
+        onSelect={onSelect}
+        onChange={onChange}
+        onReset={handleReset}
+      />
 
       {!isLoading && !isProcessed && !error && (
         <button
-          className={`${styles.sendBtn} ${
-            file ? styles.sendBtnActive : styles.sendBtnInactive
-          }`}
+          className={`
+            ${styles.sendBtn}
+            ${file ? styles.sendBtnActive : styles.sendBtnInactive}
+          `}
           onClick={handleSend}
           disabled={!file || isLoading}
         >
