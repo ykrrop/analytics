@@ -3,6 +3,7 @@ import { aggregateFile } from "../../services/aggregatorService";
 import { useHistoryStore } from "../../store/historyStore";
 import { useAggregatorStore } from "../../store/aggregatorStore";
 
+import { PageHeader } from "./components/PageHeader";
 import { FileDropzone } from "./components/FileDropzone";
 import { SendButton } from "./components/SendButton";
 import { ResultSection } from "./components/ResultSection";
@@ -103,10 +104,7 @@ export const AggregatorPage: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <p className={styles.title}>
-        Загрузите <strong>csv</strong> файл и получите{" "}
-        <strong>полную информацию</strong> о нём за сверхнизкое время
-      </p>
+      <PageHeader />
 
       <FileDropzone
         inputRef={inputRef}
