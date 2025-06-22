@@ -1,54 +1,217 @@
-# React + TypeScript + Vite
+# Межгалактическая аналитика (analytics)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Интерфейсная часть Сервиса межгалактической аналитики — это одностраничное React-приложение на базе Vite, реализующее:
 
-Currently, two official plugins are available:
+- Загрузку CSV-таблиц
+    
+- Постепенную аналитическую обработку
+    
+- Генерацию тестовых данных
+    
+- Хранение истории загрузок
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+📦 Структура проекта
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```plaintext
+analytics/
+├── public/            # статичные файлы
+│   └── index.html     # точка входа
+├── src/
+│   ├── assets/        # SVG-иконки
+│   ├── components/    # переиспользуемые UI
+│   │   ├── CloseButton/
+│   │   ├── DoneButton/
+│   │   ├── Header/
+│   │   ├── Layout/
+│   │   ├── Modal/
+│   │   ├── ResultDisplay/
+│   │   └── Spinner/
+│   ├── features/      # страницы-фичи
+│   │   ├── Aggregator/
+│   │   ├── Generator/
+│   │   └── History/
+│   ├── services/      # API-слой
+│   ├── store/         # Zustand-сторы
+│   ├── types/         # TS-типы
+│   ├── utils/         # вспомогательные функции
+│   ├── App.tsx        # маршрутизация
+│   ├── main.tsx       # рендер React
+│   └── index.css      # глобальные стили
+├── vite.config.ts     # конфиг сборки
+├── package.json       # зависимости и скрипты
+└── tsconfig.json      # настройки TS
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🛠️ Технический стек
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **Язык:** TypeScript
+    
+- **Бандлер:** Vite
+    
+- **UI:** React 19 + React-DOM
+    
+- **Роутинг:** react-router-dom
+    
+- **Состояние:** Zustand (+ persist для LocalStorage)
+    
+- **API:** Fetch
+    
+- **Модалки:** React Portals
+    
+- **Стили:** CSS Modules
+    
+- **Линтинг:** ESLint + Prettier
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+## 🚀 Установка и запуск
+
+1. **Клонировать и установить зависимости**
+    
+   ```bash
+   git clone https://github.com/ykrrop/analytics.git
+   cd analytics
+   npm install
+   ```
+    
+    
+2. **Запустить в режиме разработки**
+    
+    ```bash
+    npm run dev
+    ```
+    
+    - Приложение доступно на `http://localhost:5173`
+        
+    - В `vite.config.ts` настроен прокси:
+        ```js
+        server: {
+          proxy: {
+            '/aggregate': 'http://localhost:3000',
+            '/report':    'http://localhost:3000',
+          }
+        }
+        ```
+        
+3. **Сборка для продакшена**
+    
+    ```bash
+    npm run build
+    ```
+    
+4. **Превью сборки**
+    
+    ```bash
+    npm run preview
+    ```
+    
+5. **Линтинг**
+    ```bash
+    npm run lint
+    ```
+## 🏗️ Архитектура приложения
+
+### 1. Роутинг (`App.tsx`)
+
+```tsx
+<Router>
+  <Routes>
+    <Route path="/" element={<Layout />}>
+      <Route index element={<AggregatorPage />} />
+      <Route path="generator" element={<GeneratorPage />} />
+      <Route path="history" element={<HistoryPage />} />
+    </Route>
+  </Routes>
+</Router>
 ```
+
+- **Layout**: общий макет с `Header` и `<Outlet />`.
+    
+- Три основные страницы: CSV-аналитика, Генератор, История.
+    
+
+### 2. CSV-аналитика (`AggregatorPage`)
+
+- **Drag & drop** / выбор файла
+    
+- Постепенная обработка через `aggregateFile` (стриминг из `/aggregate?rows=<n>`)
+    
+- Отображение прогресса и финальных блоков (`ResultSection`)
+    
+- Ошибки обрабатываются и сохраняются в историю
+    
+
+### 3. Генератор (`GeneratorPage`)
+
+- Кнопка «Начать генерацию» запускает `/report?...`
+    
+- При успешном ответе автоматически скачивается `report.csv`
+    
+- Статусы `isLoading`, `isDone`, `error` в сторе
+    
+
+### 4. История (`HistoryPage`)
+
+- Список записей из LocalStorage (`useHistoryStore`)
+    
+- Удаление записи / очистка всей истории
+    
+- Открытие модалки для успешных записей (`Modal` + `ResultModalContent`)
+    
+
+### 5. State-менеджмент
+
+- **aggregatorStore**: состояние загрузки и результатов
+    
+- **generatorStore**: состояние генерации
+    
+- **historyStore**: массив записей истории
+    
+- Все сторы реализованы через Zustand + `persist` для LocalStorage
+    
+
+### 6. Компоненты
+
+- **CloseButton**, **DoneButton**, **Spinner**, **Header**, **Layout**, **Modal**, **ResultDisplay**, **HistoryEntryItem** и др.
+    
+- Повторное использование UI-компонентов
+    
+- Стили через CSS Modules
+    
+
+### 7. Утилиты (`src/utils/format.ts`)
+
+- `formatDate` → формат `DD.MM.YY`
+    
+- `formatDayOfYear` → преобразует порядковый день в строку вида `12 июня`
+    
+
+---
+
+## 🔗 Интеграция с бэкендом
+
+- **POST** `/aggregate?rows=<число>` — стриминг аналитики
+    
+- **GET** `/report?size=<Gb>&withErrors=<on|off>&maxSpend=<num>` — генерация CSV
+    
+
+---
+
+## ✅ Критерии соответствия ТЗ
+
+- Использованы **Vite**, **TypeScript**, **CSS Modules**
+    
+- **react-router-dom** для роутинга
+    
+- **Zustand** + **persist** для хранения
+    
+- **Fetch API** для всех запросов
+    
+- **React Portals** для модалок
+    
+- **ESLint + Prettier** настроены
+    
+- **Без неутверждённых библиотек**
+    
+- Соответствие дизайн-макетам: главная, генератор, история, навигация
+    
+- Реализован полный функционал: загрузка, прогресс, генерация, история, модалки, очистка
+
