@@ -4,9 +4,9 @@ import { useHistoryStore } from "../../store/historyStore";
 import { useAggregatorStore } from "../../store/aggregatorStore";
 import { Spinner } from "../../components/Spinner/Spinner";
 import { ResultDisplay } from "../../components/ResultDisplay/ResultDisplay";
+import { CloseButton } from "../../components/CloseButton/CloseButton";
 import styles from "./AggregatorPage.module.css";
 import type { AggregationResult } from "../../types";
-import Close from "../../assets/icons/Close.svg";
 
 export const AggregatorPage: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -159,13 +159,11 @@ export const AggregatorPage: React.FC = () => {
               >
                 {fileName}
               </button>
-              <button
-                className={styles.clearFileBtn}
+              <CloseButton
                 onClick={handleReset}
-                aria-label="Удалить файл"
-              >
-                <img src={Close} alt="Крестик" />
-              </button>
+                className={styles.clearFileBtn}
+                ariaLabel="Удалить файл"
+              />
             </div>
             <p className={`${styles.hint} ${error ? styles.invalidHint : ""}`}>
               {error

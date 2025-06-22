@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
+import { CloseButton } from "../CloseButton/CloseButton";
 import styles from "./Modal.module.css";
-import CloseIcon from "../../assets/icons/Close.svg";
 
 interface ModalProps {
   children: React.ReactNode;
@@ -21,9 +21,11 @@ export const Modal: React.FC<ModalProps> = ({ children, onClose }) => {
   return createPortal(
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.content} onClick={(e) => e.stopPropagation()}>
-        <button className={styles.close} onClick={onClose} aria-label="Закрыть">
-          <img src={CloseIcon} alt="" className={styles.closeIcon} />
-        </button>
+        <CloseButton
+          onClick={onClose}
+          className={styles.close}
+          ariaLabel="Закрыть"
+        />
         {children}
       </div>
     </div>,
