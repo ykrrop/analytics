@@ -1,7 +1,7 @@
 import type { ChangeEvent, DragEvent, RefObject } from "react";
-import styles from "../AggregatorPage.module.css";
-import { Spinner } from "../../../components/Spinner/Spinner";
-import { CloseButton } from "../../../components/CloseButton/CloseButton";
+import styles from "../../AggregatorPage.module.css";
+import { Spinner } from "../../../../components/Spinner/Spinner";
+import { CloseButton } from "../../../../components/CloseButton/CloseButton";
 
 interface FileDropzoneProps {
   inputRef: RefObject<HTMLInputElement | null>;
@@ -43,8 +43,11 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
     onDragLeave={onDrag}
     onDrop={onDrop}
   >
+    {/* Добавили data-testid и aria-label="" */}
     <input
       ref={inputRef}
+      data-testid="file-input"
+      aria-label=""
       type="file"
       accept=".csv"
       className={styles.hiddenInput}

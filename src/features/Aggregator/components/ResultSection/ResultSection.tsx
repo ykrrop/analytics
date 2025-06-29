@@ -1,7 +1,7 @@
 import React from "react";
-import styles from "../AggregatorPage.module.css";
-import { ResultDisplay } from "../../../components/ResultDisplay/ResultDisplay";
-import type { AggregationResult } from "../../../types";
+import styles from "../../AggregatorPage.module.css";
+import type { AggregationResult } from "../../../../types";
+import { ResultDisplay } from "../../../../components/ResultDisplay/ResultDisplay";
 
 interface ResultSectionProps {
   showBlocks: boolean;

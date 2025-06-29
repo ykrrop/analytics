@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../AggregatorPage.module.css";
+import styles from "../../AggregatorPage.module.css";
 
 interface SendButtonProps {
   disabled: boolean;

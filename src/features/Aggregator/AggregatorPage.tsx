@@ -1,11 +1,10 @@
 import React from "react";
-import { useCsvAggregator } from "./hooks/useCsvAggregator";
-import { PageHeader } from "./components/PageHeader";
-import { FileDropzone } from "./components/FileDropzone";
-import { SendButton } from "./components/SendButton";
-import { ResultSection } from "./components/ResultSection";
-
 import styles from "./AggregatorPage.module.css";
+import { useCsvAggregator } from "./hooks/useCsvAggregator";
+import { PageHeader } from "./components/PageHeader/PageHeader";
+import { FileDropzone } from "./components/FileDropzone/FileDropzone";
+import { SendButton } from "./components/SendButton/SendButton";
+import { ResultSection } from "./components/ResultSection/ResultSection";
 
 export const AggregatorPage: React.FC = () => {
   const {
