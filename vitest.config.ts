@@ -11,5 +11,6 @@ export default defineConfig({
       provider: "istanbul",
       reporter: ["text", "lcov"],
     },
+    exclude: ["node_modules", "src/__tests__/e2e/**", "**/*.e2e.*"],
   },
 });
